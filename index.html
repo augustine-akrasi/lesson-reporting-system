@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Post-Lesson Report — Demo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;color:#111;background:#f4f6f9;min-height:100vh;padding-bottom:3rem}
+.demo-banner{background:#FFF4D6;color:#6B4E00;font-size:13px;text-align:center;padding:.55rem 1rem;border-bottom:1px solid #F0DFA8}
+.hero{background:#1B3A6B;color:#fff;padding:2rem 1.25rem 1.75rem;text-align:center}
+.hero-school{font-size:11px;letter-spacing:1.2px;opacity:.7;text-transform:uppercase;margin-bottom:6px}
+.hero-title{font-size:21px;font-weight:700;margin-bottom:4px}
+.hero-sub{font-size:13px;opacity:.72}
+.form-wrap{max-width:620px;margin:0 auto;padding:1.25rem}
+.section-card{background:#fff;border-radius:14px;padding:1.25rem 1.25rem 1.1rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.section-title{font-size:12px;font-weight:700;color:#1B3A6B;text-transform:uppercase;letter-spacing:.7px;margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1.5px solid #E6F1FB;display:flex;align-items:center;gap:7px}
+.section-icon{font-size:16px}
+label{display:block;font-size:13px;font-weight:600;color:#444;margin-bottom:.3rem;margin-top:.75rem}
+label.first{margin-top:0}
+input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:.65rem .85rem;border:1.5px solid #dde1e8;border-radius:10px;font-size:15px;background:#fff;color:#111;outline:none;-webkit-appearance:none;transition:border-color .15s,box-shadow .15s;font-family:inherit}
+input:focus,select:focus,textarea:focus{border-color:#1B3A6B;box-shadow:0 0 0 3px rgba(27,58,107,.1)}
+textarea{resize:vertical;min-height:80px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.coverage-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:.3rem}
+.cov-btn{padding:.45rem 1rem;border-radius:8px;border:1.5px solid #dde1e8;background:#f4f6f9;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:#555}
+.cov-btn:active{transform:scale(.96)}
+.cov-btn.sel-green{background:#0F6E56;color:#fff;border-color:#0F6E56}
+.cov-btn.sel-amber{background:#BA7517;color:#fff;border-color:#BA7517}
+.cov-btn.sel-red{background:#993C1D;color:#fff;border-color:#993C1D}
+.att-summary{display:flex;gap:10px;margin-bottom:.75rem}
+.att-stat{flex:1;background:#f4f6f9;border-radius:10px;padding:.6rem .75rem;text-align:center}
+.att-stat-val{font-size:22px;font-weight:700}
+.att-stat-lbl{font-size:11px;color:#888;margin-top:1px}
+.att-present .att-stat-val{color:#0F6E56}
+.att-absent .att-stat-val{color:#993C1D}
+.att-rate .att-stat-val{color:#1B3A6B}
+.att-controls{display:flex;gap:8px;margin-bottom:.65rem;align-items:center}
+.att-search{flex:1;padding:.5rem .75rem;border:1.5px solid #dde1e8;border-radius:8px;font-size:13px;outline:none;font-family:inherit}
+.att-search:focus{border-color:#1B3A6B}
+.att-bulk{display:flex;gap:6px}
+.att-bulk-btn{padding:.4rem .8rem;border-radius:7px;border:1.5px solid #dde1e8;font-size:12px;font-weight:700;cursor:pointer;background:#f4f6f9;color:#555;transition:all .12s}
+.att-roster{border:1.5px solid #eee;border-radius:10px;overflow:hidden;max-height:380px;overflow-y:auto}
+.att-row{display:flex;align-items:center;padding:.55rem .75rem;border-bottom:1px solid #f0f0f0}
+.att-row:last-child{border-bottom:none}
+.att-row.filtered-out{display:none}
+.att-num{font-size:11px;color:#bbb;width:22px;flex-shrink:0;text-align:right;margin-right:8px}
+.att-id{font-size:11px;color:#aaa;width:95px;flex-shrink:0}
+.att-name{font-size:13px;flex:1;color:#111;font-weight:500}
+.att-btns{display:flex;gap:5px;flex-shrink:0}
+.p-btn,.a-btn{padding:5px 13px;border-radius:7px;border:1.5px solid #dde1e8;background:#f4f6f9;font-size:12px;font-weight:700;cursor:pointer;transition:all .12s}
+.p-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
+.a-btn.active{background:#993C1D;color:#fff;border-color:#993C1D}
+.toggle-wrap{display:flex;align-items:center;gap:12px;margin-top:.5rem}
+.toggle{position:relative;width:46px;height:26px;flex-shrink:0;margin:0}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#dde1e8;border-radius:26px;transition:.2s}
+.slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input:checked+.slider{background:#1B3A6B}
+input:checked+.slider:before{transform:translateX(20px)}
+.toggle-label{font-size:14px;color:#555;font-weight:500}
+#assess-section{display:none}
+.score-roster{border:1.5px solid #eee;border-radius:10px;overflow:hidden;margin-top:.5rem}
+.score-row-item{display:flex;align-items:center;padding:.48rem .75rem;border-bottom:1px solid #f0f0f0;gap:8px}
+.score-row-item:last-child{border-bottom:none}
+.score-num{font-size:11px;color:#bbb;width:22px;text-align:right;flex-shrink:0}
+.score-id{font-size:11px;color:#aaa;width:95px;flex-shrink:0}
+.score-name{font-size:12px;flex:1;color:#111;font-weight:500;line-height:1.3}
+.score-input{width:64px!important;padding:.35rem .4rem!important;font-size:14px!important;text-align:center;flex-shrink:0;margin:0!important}
+.score-grade{font-size:12px;font-weight:700;min-width:32px;text-align:center;flex-shrink:0}
+.chip-group{display:flex;gap:7px;flex-wrap:wrap;margin-top:.5rem}
+.chip{padding:.38rem .85rem;border-radius:20px;border:1.5px solid #dde1e8;background:#f4f6f9;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;color:#555}
+.chip.selected{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.btn-submit{display:block;width:100%;padding:.9rem;border-radius:12px;border:none;background:#1B3A6B;color:#fff;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-top:1.25rem}
+.btn-submit:hover{background:#163259}
+.btn-submit:disabled{background:#999;cursor:not-allowed}
+#success-screen{display:none;text-align:center;padding:3rem 1.5rem;max-width:480px;margin:0 auto}
+.success-icon{font-size:56px;margin-bottom:1rem}
+.success-title{font-size:22px;font-weight:700;color:#0F6E56;margin-bottom:.5rem}
+.success-sub{font-size:14px;color:#666;line-height:1.6;margin-bottom:1rem}
+.payload{text-align:left;background:#0f1b2d;color:#d6e4ff;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;border-radius:10px;padding:1rem;max-height:320px;overflow:auto;margin-bottom:1.5rem;white-space:pre-wrap}
+.btn-again{display:inline-block;padding:.7rem 1.75rem;border-radius:10px;background:#1B3A6B;color:#fff;font-size:14px;font-weight:600;cursor:pointer;border:none}
+.required-star{color:#993C1D}
+.hint{font-size:11px;color:#aaa;font-weight:400;margin-left:4px}
+.no-class-msg{font-size:13px;color:#aaa;text-align:center;padding:1.5rem;font-style:italic}
+.max-score-row{display:flex;align-items:center;gap:10px;margin-top:.3rem}
+.max-score-row input{max-width:120px!important;width:120px!important}
+.max-score-row span{font-size:13px;color:#888}
+.form-error{display:none;background:#FBEAEA;color:#993C1D;border-radius:10px;padding:.7rem .9rem;font-size:13px;margin-top:1rem}
+@media(max-width:480px){.att-id,.score-id,.att-num,.score-num{display:none}}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">Demo version · all teachers and students are fictional · submissions are not saved</div>
+
+<div class="hero">
+  <div class="hero-school">Sample Senior High School — Mathematics Dept.</div>
+  <div class="hero-title">Post-Lesson Report</div>
+  <div class="hero-sub">SHS 2 &nbsp;·&nbsp; Demo</div>
+</div>
+
+<div class="form-wrap">
+
+<div id="success-screen">
+  <div class="success-icon">✅</div>
+  <div class="success-title">Report submitted!</div>
+  <div class="success-sub">In the live system this record is sent to a Google Apps Script web app, stored in Google Sheets and summarised on the Head of Department dashboard. This is the JSON record that would be sent:</div>
+  <pre class="payload" id="payload-view"></pre>
+  <button class="btn-again" onclick="resetForm()">Submit another report</button>
+</div>
+
+<form id="lesson-form" onsubmit="handleSubmit(event)" novalidate>
+
+  <div class="section-card">
+    <div class="section-title"><span class="section-icon">👤</span> Teacher &amp; Class</div>
+    <label class="first" for="f-teacher">Your name <span class="required-star">*</span></label>
+    <select id="f-teacher" required>
+      <option value="">— Select your name —</option>
+      <option>Teacher A (demo)</option>
+      <option>Teacher B (demo)</option>
+      <option>Teacher C (demo)</option>
+    </select>
+    <label for="f-class">Class taught <span class="required-star">*</span></label>
+    <select id="f-class" required onchange="onClassChange()">
+      <option value="">— Select class —</option>
+      <option>2 Science</option>
+      <option>2 Business</option>
+      <option>2 General Arts</option>
+      <option>2 Home Economics</option>
+    </select>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="section-icon">📖</span> Lesson Details</div>
+    <label class="first" for="f-date">Date of lesson <span class="required-star">*</span></label>
+    <input type="date" id="f-date" required/>
+    <label for="f-period">Period <span class="required-star">*</span></label>
+    <select id="f-period" required>
+      <option value="">— Select period —</option>
+      <option>Period 1 (7:00am – 8:00am)</option>
+      <option>Period 2 (8:00am – 9:00am)</option>
+      <option>Period 3 (9:30am – 10:30am)</option>
+      <option>Period 4 (10:30am – 11:30am)</option>
+      <option>Period 5 (11:30am – 12:30pm)</option>
+      <option>Period 6 (1:00pm – 2:00pm)</option>
+      <option>Period 7 (2:00pm – 3:00pm)</option>
+      <option>Period 8 (3:00pm – 4:00pm)</option>
+    </select>
+    <label for="f-topic">Topic taught <span class="required-star">*</span></label>
+    <input type="text" id="f-topic" placeholder="e.g. Quadratic equations — factorisation" required/>
+    <label>Syllabus coverage <span class="required-star">*</span></label>
+    <div class="coverage-group">
+      <button type="button" class="cov-btn" data-val="Completed" onclick="selectCoverage(this,'sel-green')">✅ Completed</button>
+      <button type="button" class="cov-btn" data-val="Partially covered" onclick="selectCoverage(this,'sel-amber')">⚠️ Partially covered</button>
+      <button type="button" class="cov-btn" data-val="Not covered" onclick="selectCoverage(this,'sel-red')">❌ Not covered</button>
+    </div>
+    <input type="hidden" id="f-coverage"/>
+    <label for="f-notes">Notes / Observations <span class="hint">(optional)</span></label>
+    <textarea id="f-notes" placeholder="Any observations, issues, or highlights from the lesson…"></textarea>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="section-icon">✅</span> Attendance Register</div>
+    <div class="att-summary">
+      <div class="att-stat att-present"><div class="att-stat-val" id="att-present-count">0</div><div class="att-stat-lbl">Present</div></div>
+      <div class="att-stat att-absent"><div class="att-stat-val" id="att-absent-count">0</div><div class="att-stat-lbl">Absent</div></div>
+      <div class="att-stat att-rate"><div class="att-stat-val" id="att-rate-val">—</div><div class="att-stat-lbl">Attendance %</div></div>
+    </div>
+    <div id="att-roster-wrap"><div class="no-class-msg">Select a class above to load the student register.</div></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="section-icon">✏️</span> Assessment</div>
+    <div class="toggle-wrap">
+      <label class="toggle"><input type="checkbox" id="assess-toggle" onchange="toggleAssess()"/><span class="slider"></span></label>
+      <span class="toggle-label">An assessment was conducted this lesson</span>
+    </div>
+    <div id="assess-section" style="margin-top:1.1rem">
+      <label class="first" for="f-assess-type">Assessment type <span class="required-star">*</span></label>
+      <select id="f-assess-type">
+        <option value="">— Select type —</option>
+        <option>Class exercise</option><option>Quiz / pop quiz</option><option>Homework review</option>
+        <option>Group work</option><option>Board work</option><option>Written test</option>
+        <option>Oral questioning</option><option>Project review</option>
+      </select>
+      <label for="f-assess-title">Assessment title / description</label>
+      <input type="text" id="f-assess-title" placeholder="e.g. 5-question quiz on indices"/>
+      <label for="f-max-score">Total marks <span class="hint">(out of)</span></label>
+      <div class="max-score-row">
+        <input type="number" id="f-max-score" min="1" placeholder="e.g. 20" oninput="updateScoreLabels()"/>
+        <span>marks total</span>
+      </div>
+      <label style="margin-top:.9rem">Student scores <span class="hint">(leave blank if absent or did not sit)</span></label>
+      <div id="score-roster-wrap"><div class="no-class-msg">Select a class above to load student score fields.</div></div>
+      <label style="margin-top:1rem">Areas where students struggled <span class="hint">(select all that apply)</span></label>
+      <div class="chip-group" id="weak-areas">
+        <span class="chip" onclick="toggleChip(this)">Conceptual understanding</span>
+        <span class="chip" onclick="toggleChip(this)">Computation / arithmetic</span>
+        <span class="chip" onclick="toggleChip(this)">Word problems</span>
+        <span class="chip" onclick="toggleChip(this)">Graphing / diagrams</span>
+        <span class="chip" onclick="toggleChip(this)">Algebra manipulation</span>
+        <span class="chip" onclick="toggleChip(this)">Fractions / decimals</span>
+        <span class="chip" onclick="toggleChip(this)">Geometry / mensuration</span>
+        <span class="chip" onclick="toggleChip(this)">Trigonometry</span>
+        <span class="chip" onclick="toggleChip(this)">Statistics / probability</span>
+        <span class="chip" onclick="toggleChip(this)">Time management</span>
+        <span class="chip" onclick="toggleChip(this)">Engagement / participation</span>
+      </div>
+      <label for="f-assess-notes" style="margin-top:.9rem">Additional comments on assessment <span class="hint">(optional)</span></label>
+      <textarea id="f-assess-notes" placeholder="Overall performance, remediation needed, follow-up plan…"></textarea>
+    </div>
+  </div>
+
+  <div class="form-error" id="form-error"></div>
+  <button type="submit" class="btn-submit" id="submit-btn">Submit Report →</button>
+</form>
+</div>
+
+<script>
+// Live deployments set this to the Google Apps Script web-app URL.
+// Left empty here, so the demo never sends data anywhere.
+const SHEET_URL = '';
+
+// Fictional demo roster. In production the roster is kept out of the public page.
+const STUDENTS = {
+  "2 Science":[
+    {"id":"SCI/DEMO/001","name":"AMOAH ESI"},
+    {"id":"SCI/DEMO/002","name":"SARPONG MANSA"},
+    {"id":"SCI/DEMO/003","name":"OWUSU AKOSUA"},
+    {"id":"SCI/DEMO/004","name":"BAAH YAW"},
+    {"id":"SCI/DEMO/005","name":"OFORI AKUA"},
+    {"id":"SCI/DEMO/006","name":"OWUSU MAWULI"},
+    {"id":"SCI/DEMO/007","name":"KUFFOUR ABENA"},
+    {"id":"SCI/DEMO/008","name":"ADJEI KWEKU"},
+    {"id":"SCI/DEMO/009","name":"BOATENG KWABENA"},
+    {"id":"SCI/DEMO/010","name":"BOATENG NANA"},
+    {"id":"SCI/DEMO/011","name":"ADJEI KOFI"},
+    {"id":"SCI/DEMO/012","name":"ACHEAMPONG YAW"}
+  ],
+  "2 Business":[
+    {"id":"BUS/DEMO/001","name":"ANSAH MANSA"},
+    {"id":"BUS/DEMO/002","name":"ACHEAMPONG KOFI"},
+    {"id":"BUS/DEMO/003","name":"ACHEAMPONG AKUA"},
+    {"id":"BUS/DEMO/004","name":"SARPONG KOFI"},
+    {"id":"BUS/DEMO/005","name":"ANSAH KOFI"},
+    {"id":"BUS/DEMO/006","name":"BAAH DZIFA"},
+    {"id":"BUS/DEMO/007","name":"OSEI KOJO"},
+    {"id":"BUS/DEMO/008","name":"ADJEI ESI"},
+    {"id":"BUS/DEMO/009","name":"ACHEAMPONG KOJO"},
+    {"id":"BUS/DEMO/010","name":"BAAH SELORM"}
+  ],
+  "2 General Arts":[
+    {"id":"GA/DEMO/001","name":"AGYEMANG YAW"},
+    {"id":"GA/DEMO/002","name":"DARKO KWESI"},
+    {"id":"GA/DEMO/003","name":"ASANTE NANA"},
+    {"id":"GA/DEMO/004","name":"BOATENG AKUA"},
+    {"id":"GA/DEMO/005","name":"OWUSU EKOW"},
+    {"id":"GA/DEMO/006","name":"DARKO FIIFI"},
+    {"id":"GA/DEMO/007","name":"BAAH KWEKU"},
+    {"id":"GA/DEMO/008","name":"AMOAH YAA"},
+    {"id":"GA/DEMO/009","name":"ACHEAMPONG MAWULI"},
+    {"id":"GA/DEMO/010","name":"TWUMASI KWESI"},
+    {"id":"GA/DEMO/011","name":"BONSU KWABENA"},
+    {"id":"GA/DEMO/012","name":"AGYEMANG ABA"}
+  ],
+  "2 Home Economics":[
+    {"id":"HE/DEMO/001","name":"ANSAH AKOSUA"},
+    {"id":"HE/DEMO/002","name":"KUFFOUR FIIFI"},
+    {"id":"HE/DEMO/003","name":"AMOAH KWAKU"},
+    {"id":"HE/DEMO/004","name":"TWUMASI KOJO"},
+    {"id":"HE/DEMO/005","name":"GYAMFI AKOSUA"},
+    {"id":"HE/DEMO/006","name":"ASANTE ARABA"},
+    {"id":"HE/DEMO/007","name":"ADJEI KWAME"},
+    {"id":"HE/DEMO/008","name":"FRIMPONG KWEKU"},
+    {"id":"HE/DEMO/009","name":"OWUSU KOBINA"},
+    {"id":"HE/DEMO/010","name":"BOATENG SERWAA"}
+  ]
+};
+
+let attState = {};
+document.getElementById('f-date').valueAsDate = new Date();
+
+function onClassChange(){
+  const cls = document.getElementById('f-class').value;
+  attState = {};
+  renderAttRoster(cls);
+  renderScoreRoster(cls);
+  updateAttSummary();
+}
+
+function renderAttRoster(cls){
+  const wrap = document.getElementById('att-roster-wrap');
+  if(!cls || !STUDENTS[cls]){
+    wrap.innerHTML = '<div class="no-class-msg">Select a class above to load the student register.</div>';
+    return;
+  }
+  const students = STUDENTS[cls];
+  students.forEach(s => { if(attState[s.id] === undefined) attState[s.id] = null; });
+  let html = `<div class="att-controls">
+    <input class="att-search" type="text" placeholder="Search student name or ID…" oninput="filterAtt(this.value)"/>
+    <div class="att-bulk">
+      <button type="button" class="att-bulk-btn" style="color:#0F6E56;border-color:#0F6E56" onclick="markAll('present')">All ✓</button>
+      <button type="button" class="att-bulk-btn" style="color:#993C1D;border-color:#993C1D" onclick="markAll('absent')">All ✗</button>
+    </div>
+  </div><div class="att-roster" id="att-roster">`;
+  students.forEach((s, i) => {
+    html += `<div class="att-row" data-id="${s.id}" data-name="${s.name.toLowerCase()}">
+      <span class="att-num">${i+1}</span>
+      <span class="att-id">${s.id}</span>
+      <span class="att-name">${s.name}</span>
+      <div class="att-btns">
+        <button type="button" class="p-btn" onclick="markStudent('${s.id}','present',this)">P</button>
+        <button type="button" class="a-btn" onclick="markStudent('${s.id}','absent',this)">A</button>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML = html + '</div>';
+}
+
+function markStudent(id, status, btn){
+  attState[id] = (attState[id] === status) ? null : status;
+  const row = btn.closest('.att-row');
+  row.querySelector('.p-btn').classList.toggle('active', attState[id] === 'present');
+  row.querySelector('.a-btn').classList.toggle('active', attState[id] === 'absent');
+  updateAttSummary();
+}
+
+function markAll(status){
+  const cls = document.getElementById('f-class').value;
+  if(!cls) return;
+  STUDENTS[cls].forEach(s => attState[s.id] = status);
+  document.querySelectorAll('.att-row').forEach(row => {
+    row.querySelector('.p-btn').classList.toggle('active', status === 'present');
+    row.querySelector('.a-btn').classList.toggle('active', status === 'absent');
+  });
+  updateAttSummary();
+}
+
+function filterAtt(q){
+  const term = q.toLowerCase().trim();
+  document.querySelectorAll('.att-row').forEach(row => {
+    const match = !term || row.dataset.name.includes(term) || row.dataset.id.toLowerCase().includes(term);
+    row.classList.toggle('filtered-out', !match);
+  });
+}
+
+function updateAttSummary(){
+  const vals = Object.values(attState);
+  const present = vals.filter(v => v === 'present').length;
+  const absent = vals.filter(v => v === 'absent').length;
+  const total = present + absent;
+  document.getElementById('att-present-count').textContent = present;
+  document.getElementById('att-absent-count').textContent = absent;
+  document.getElementById('att-rate-val').textContent = total ? Math.round((present/total)*100) + '%' : '—';
+}
+
+function renderScoreRoster(cls){
+  const wrap = document.getElementById('score-roster-wrap');
+  if(!cls || !STUDENTS[cls]){
+    wrap.innerHTML = '<div class="no-class-msg">Select a class above to load student score fields.</div>';
+    return;
+  }
+  let html = '<div class="score-roster">';
+  STUDENTS[cls].forEach((s, i) => {
+    const safeId = s.id.replace(/\//g, '-');
+    html += `<div class="score-row-item">
+      <span class="score-num">${i+1}</span>
+      <span class="score-id">${s.id}</span>
+      <span class="score-name">${s.name}</span>
+      <input type="number" class="score-input" min="0" placeholder="—" data-id="${s.id}" data-name="${s.name}" oninput="calcGrade(this)" id="sc-${safeId}"/>
+      <span class="score-grade" id="gr-${safeId}">—</span>
+    </div>`;
+  });
+  wrap.innerHTML = html + '</div>';
+}
+
+function calcGrade(input){
+  const max = parseFloat(document.getElementById('f-max-score').value);
+  const val = parseFloat(input.value);
+  const gradeEl = document.getElementById('gr-' + input.dataset.id.replace(/\//g, '-'));
+  if(!gradeEl) return;
+  if(isNaN(val) || isNaN(max) || max <= 0){ gradeEl.textContent = '—'; gradeEl.style.color = '#aaa'; return; }
+  const pct = Math.round((val/max)*100);
+  gradeEl.textContent = pct + '%';
+  gradeEl.style.color = pct >= 60 ? '#0F6E56' : pct >= 40 ? '#BA7517' : '#993C1D';
+}
+
+function updateScoreLabels(){ document.querySelectorAll('.score-input').forEach(inp => calcGrade(inp)); }
+
+function selectCoverage(btn, cls){
+  document.querySelectorAll('.cov-btn').forEach(b => b.className = 'cov-btn');
+  btn.classList.add(cls);
+  document.getElementById('f-coverage').value = btn.dataset.val;
+}
+
+function toggleAssess(){
+  document.getElementById('assess-section').style.display =
+    document.getElementById('assess-toggle').checked ? 'block' : 'none';
+}
+
+function toggleChip(el){ el.classList.toggle('selected'); }
+
+function getWeakAreas(){ return [...document.querySelectorAll('.chip.selected')].map(c => c.textContent).join(', '); }
+
+function getAttendanceData(){
+  const cls = document.getElementById('f-class').value;
+  const present = [], absent = [];
+  if(cls && STUDENTS[cls]){
+    STUDENTS[cls].forEach(s => {
+      if(attState[s.id] === 'present') present.push({id:s.id, name:s.name});
+      else if(attState[s.id] === 'absent') absent.push({id:s.id, name:s.name});
+    });
+  }
+  return {present, absent};
+}
+
+function getScoreData(){
+  const scores = [];
+  document.querySelectorAll('.score-input').forEach(inp => {
+    const val = inp.value.trim();
+    if(val !== '') scores.push({id:inp.dataset.id, name:inp.dataset.name, score:parseFloat(val)});
+  });
+  return scores;
+}
+
+function showError(msg){
+  const el = document.getElementById('form-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+function handleSubmit(e){
+  e.preventDefault();
+  document.getElementById('form-error').style.display = 'none';
+  const v = id => document.getElementById(id).value.trim();
+  const teacher = v('f-teacher'), cls = v('f-class'), date = v('f-date'),
+        period = v('f-period'), topic = v('f-topic'), coverage = v('f-coverage');
+
+  if(!teacher) return showError('Please select your name.');
+  if(!cls) return showError('Please select your class.');
+  if(!date) return showError('Please enter the lesson date.');
+  if(!period) return showError('Please select the lesson period.');
+  if(!topic) return showError('Please enter the topic taught.');
+  if(!coverage) return showError('Please select syllabus coverage.');
+
+  const att = getAttendanceData();
+  const total = att.present.length + att.absent.length;
+  const hasAssess = document.getElementById('assess-toggle').checked;
+  const scores = hasAssess ? getScoreData() : [];
+  const maxScore = hasAssess ? parseFloat(v('f-max-score')) || null : null;
+  const avg = (scores.length && maxScore)
+    ? Math.round(scores.reduce((a,b) => a + b.score, 0) / scores.length / maxScore * 100) : null;
+
+  const payload = {
+    formType: 'post-lesson-report',
+    teacher, class: cls, date, period, topic, coverage,
+    notes: v('f-notes'),
+    attendance: {
+      present: att.present, absent: att.absent,
+      presentCount: att.present.length, absentCount: att.absent.length,
+      totalMarked: total, rate: total ? Math.round(att.present.length/total*100) : null
+    },
+    assessment: hasAssess ? {
+      type: v('f-assess-type'), title: v('f-assess-title'), maxScore,
+      studentScores: scores, averagePercent: avg,
+      weakAreas: getWeakAreas(), notes: v('f-assess-notes')
+    } : null,
+    submittedAt: new Date().toISOString()
+  };
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  const done = () => {
+    document.getElementById('payload-view').textContent = JSON.stringify(payload, null, 2);
+    document.getElementById('lesson-form').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+
+  if(!SHEET_URL){ setTimeout(done, 400); return; }   // demo mode
+  fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
+    .catch(() => {}).finally(done);
+}
+
+function resetForm(){
+  document.getElementById('lesson-form').reset();
+  document.getElementById('lesson-form').style.display = 'block';
+  document.getElementById('success-screen').style.display = 'none';
+  document.querySelectorAll('.cov-btn').forEach(b => b.className = 'cov-btn');
+  document.getElementById('f-coverage').value = '';
+  document.getElementById('assess-section').style.display = 'none';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  attState = {};
+  renderAttRoster(''); renderScoreRoster(''); updateAttSummary();
+  document.getElementById('f-date').valueAsDate = new Date();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submit Report →'; btn.disabled = false;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
