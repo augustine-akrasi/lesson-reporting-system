@@ -72,4 +72,4 @@ This repository contains **no real school data**. All names in the demo roster a
 ## Author
 
 **Augustine Akrasi**: Mathematics educator & data scientist (MSc Data Science)
-[LinkedIn](https://www.linkedin.com/in/augustine-akrasi-3ba695358) · [GitHub](https://github.com/augustine-akrasi)
+[LinkedIn](https://www.linkedin.com/in/augustine-akrasi) · [GitHub](https://github.com/augustine-akrasi)
